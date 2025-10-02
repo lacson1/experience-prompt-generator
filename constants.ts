@@ -1,4 +1,3 @@
-
 import { Persona, Tone, TaskType, TemplateCategory, PromptTemplate, ExamplePrompt } from './types';
 
 export const PERSONA_OPTIONS: Persona[] = [
@@ -22,10 +21,13 @@ export const TONE_OPTIONS: Tone[] = [
 export const TASK_TYPE_OPTIONS: TaskType[] = [
   TaskType.CODE_GENERATION,
   TaskType.API_DESIGN,
+  TaskType.API_TESTING_PLAN,
   TaskType.DATABASE_SCHEMA_DESIGN,
   TaskType.SYSTEM_ARCHITECTURE_DESIGN,
   TaskType.CODE_REVIEW_FEEDBACK,
   TaskType.DEBUGGING_ASSISTANCE,
+  TaskType.FRONTEND_ERROR_FIX,
+  TaskType.BACKEND_ERROR_FIX,
   TaskType.E2E_TEST_PLAN,
   TaskType.TEXT_SUMMARIZATION,
   TaskType.CREATIVE_WRITING,
@@ -57,6 +59,39 @@ export const PROMPT_TEMPLATES: PromptTemplate[] = [
       tone: Tone.PROFESSIONAL,
       taskType: TaskType.API_DESIGN,
     },
+  },
+  {
+    title: "API Test Plan",
+    description: "Generate a comprehensive test plan for a REST API endpoint.",
+    category: TemplateCategory.SOFTWARE_DEVELOPMENT,
+    template: "Create a test plan for the API endpoint `[Endpoint Path, e.g., /api/products]`. The endpoint is for `[Purpose, e.g., creating a new product]`. Include test cases for: success scenarios (2xx), client errors (4xx), server errors (5xx), and security checks (e.g., authentication, input validation).",
+    defaults: {
+        persona: Persona.SOFTWARE_ENGINEER,
+        tone: Tone.TECHNICAL,
+        taskType: TaskType.API_TESTING_PLAN,
+    }
+  },
+  {
+    title: "Frontend Bug Fix",
+    description: "Get help diagnosing and fixing a frontend JavaScript error.",
+    category: TemplateCategory.SOFTWARE_DEVELOPMENT,
+    template: "Analyze the following frontend code snippet and error message to identify the root cause and provide a fix.\n\n- **Framework:** `[e.g., React, Vue, Vanilla JS]`\n- **Error Message:** `[Paste the full error message here]`\n- **Code with the error:**\n```javascript\n[Paste the relevant code block here]\n```",
+    defaults: {
+        persona: Persona.SOFTWARE_ENGINEER,
+        tone: Tone.TECHNICAL,
+        taskType: TaskType.FRONTEND_ERROR_FIX,
+    }
+  },
+  {
+    title: "Backend Bug Fix",
+    description: "Get help diagnosing and fixing a backend code error.",
+    category: TemplateCategory.SOFTWARE_DEVELOPMENT,
+    template: "Analyze the following backend code snippet and error message to identify the root cause and provide a fix.\n\n- **Language/Framework:** `[e.g., Node.js/Express, Python/Django]`\n- **Error Message:** `[Paste the full error message here]`\n- **Code with the error:**\n```javascript\n[Paste the relevant code block here]\n```",
+    defaults: {
+        persona: Persona.SOFTWARE_ENGINEER,
+        tone: Tone.TECHNICAL,
+        taskType: TaskType.BACKEND_ERROR_FIX,
+    }
   },
   {
     title: "Git Commit Message",

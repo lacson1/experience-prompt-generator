@@ -1,4 +1,3 @@
-
 export enum Persona {
   SOFTWARE_ENGINEER = "Software Engineer",
   MARKETING_EXPERT = "Marketing Expert",
@@ -20,10 +19,13 @@ export enum Tone {
 export enum TaskType {
   CODE_GENERATION = "Code Generation",
   API_DESIGN = "API Design",
+  API_TESTING_PLAN = "API Testing Plan",
   DATABASE_SCHEMA_DESIGN = "Database Schema Design",
   SYSTEM_ARCHITECTURE_DESIGN = "System Architecture Design",
   CODE_REVIEW_FEEDBACK = "Code Review Feedback",
   DEBUGGING_ASSISTANCE = "Debugging Assistance",
+  FRONTEND_ERROR_FIX = "Frontend Error Fix",
+  BACKEND_ERROR_FIX = "Backend Error Fix",
   E2E_TEST_PLAN = "E2E Test Plan",
   TEXT_SUMMARIZATION = "Text Summarization",
   CREATIVE_WRITING = "Creative Writing",

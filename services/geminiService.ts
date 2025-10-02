@@ -40,6 +40,12 @@ const getFormatRequirements = (taskType: TaskType): string => {
         return "For example, instruct the AI to analyze a provided code snippet and error message, and to output a list of potential causes followed by step-by-step suggestions for how to fix the issue.";
     case TaskType.E2E_TEST_PLAN:
         return "For example, specify that the plan should be formatted as a series of user stories, with each story having a list of test cases that include a description, steps to reproduce, and expected results.";
+    case TaskType.API_TESTING_PLAN:
+        return "For example, request a markdown table with columns for 'Test Case', 'Steps', 'Expected Result', and 'Test Type' (e.g., Success, Failure, Security).";
+    case TaskType.FRONTEND_ERROR_FIX:
+        return "For example, instruct the AI to provide a clear explanation of the bug's root cause, followed by a 'before' and 'after' code block showing the corrected code. Specify the framework (e.g., React, Vue).";
+    case TaskType.BACKEND_ERROR_FIX:
+        return "For example, instruct the AI to provide a clear explanation of the bug's root cause, followed by a corrected code snippet. Specify the language and framework (e.g., Node.js/Express, Python/Django).";
     default:
       return "For example, explicitly request a format like JSON, markdown, or a bulleted list.";
   }
@@ -71,6 +77,12 @@ const getExampleForTaskType = (taskType: TaskType): string => {
         return "An example of a debugging request structure:\n**Error:** `TypeError: Cannot read properties of undefined (reading 'map')`\n**Code Snippet:**\n```javascript\nfunction renderItems(items) {\n  return items.map(item => `<li>${item.name}</li>`);\n}\n```\n**Problem:** The error occurs when `items` is not an array.";
     case TaskType.E2E_TEST_PLAN:
         return "An example of a test case:\n**User Story:** As a user, I want to log in to my account.\n**Test Case 1.1:** Successful Login\n- **Steps:**\n  1. Navigate to the login page.\n  2. Enter valid credentials.\n  3. Click 'Submit'.\n- **Expected Result:** User is redirected to the dashboard.";
+    case TaskType.API_TESTING_PLAN:
+        return "An example test case for an API endpoint:\n| Test Case          | Steps                                     | Expected Result                        | Test Type |\n|--------------------|-------------------------------------------|----------------------------------------|-----------|\n| Valid Login        | POST /login with correct user/pass        | 200 OK with auth token                 | Success   |";
+    case TaskType.FRONTEND_ERROR_FIX:
+        return "An example of a fix for a React state issue:\n**Explanation:** The error is caused by directly mutating the state. React state should be immutable.\n**Before:**\n```javascript\nconst handleAddItem = () => {\n  items.push('new item');\n  setItems(items);\n}\n```\n**After:**\n```javascript\nconst handleAddItem = () => {\n  setItems([...items, 'new item']);\n}\n```";
+    case TaskType.BACKEND_ERROR_FIX:
+        return "An example of a fix for an unhandled promise in Node.js:\n**Explanation:** The database query is asynchronous but lacks `await` and error handling.\n**Before:**\n```javascript\napp.get('/users/:id', (req, res) => {\n  const user = db.users.find(req.params.id);\n  res.json(user);\n});\n```\n**After:**\n```javascript\napp.get('/users/:id', async (req, res) => {\n  try {\n    const user = await db.users.find(req.params.id);\n    if (!user) return res.status(404).send('User not found.');\n    res.json(user);\n  } catch (error) {\n    res.status(500).send('Server Error');\n  }\n});\n```";
     default:
       return "For example, if JSON is requested:\n```json\n{\n  \"key\": \"value\",\n  \"another_key\": 123\n}\n```";
   }
@@ -125,6 +137,9 @@ export const generateExperiencedPrompt = async (options: PromptOptions): Promise
         }
         if (errorMessage.includes('resource has been exhausted') || errorMessage.includes('429')) {
             return { error: 'Rate limit exceeded. You have made too many requests in a short period. Please wait a moment and try again.' };
+        }
+        if (errorMessage.includes('500') || errorMessage.includes('503') || errorMessage.includes('server error')) {
+            return { error: 'The AI service is currently experiencing issues on its end. Please try again in a few minutes.' };
         }
         return { error: 'Could not connect to the AI service. Please check your network connection and try again.' };
     }
